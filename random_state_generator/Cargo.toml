@@ -1,0 +1,17 @@
+[package]
+name = "random_state_generator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+rand = "0.9"
+rand_distr = "0.5"
+csv = "1"
+plotters = "0.3"
+plotters-bitmap = "0.3"
+eframe = { version = "0.27", features = ["glow"] }
+egui_plot = "0.27"
+
+[dev-dependencies]
+tempfile = "3"
