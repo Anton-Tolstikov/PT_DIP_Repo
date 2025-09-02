@@ -84,11 +84,11 @@ class ThemeConfig:
 THEME_PETROTRACE = ThemeConfig(
     name="PetroTrace",
     bg="#F5F9F5",           # светло-зеленый фон
-    fg="#2C3E2C",           # темно-зеленый текст
-    accent="#228B22",       # forest green акцент
+    fg="#000000",           # темно-зеленый текст
+    accent="#065606",       # forest green акцент
     frame_bg="#E8F4E8",     # очень светло-зеленый фон фреймов
     entry_bg="#FFFFFF",     # белый фон полей ввода
-    entry_fg="#2C3E2C",     # темно-зеленый текст полей ввода
+    entry_fg="#000000",     # темно-зеленый текст полей ввода
     button_bg="#228B22",    # forest green кнопки
     button_fg="#FFFFFF",    # белый текст кнопок
     mpl_face="#F5F9F5",     # светло-зеленый фон графика
@@ -101,11 +101,11 @@ THEME_PETROTRACE = ThemeConfig(
 THEME_GPN = ThemeConfig(
     name="GPN",
     bg="#F7FAFF",           # более светлый синий фон
-    fg="#0A1526",           # чуть светлее темно-синий текст
+    fg="#000000",           # чуть светлее темно-синий текст
     accent="#0088DA",       # синий цвет как у Газпрома
     frame_bg="#F0F7FF",     # более светлый синий фон фреймов
     entry_bg="#FFFFFF",     # белый фон полей ввода
-    entry_fg="#0A1526",     # темно-синий текст полей ввода
+    entry_fg="#000000",     # темно-синий текст полей ввода
     button_bg="#0088DA",    # синий Газпрома для кнопок
     button_fg="#FFFFFF",    # белый текст кнопок
     mpl_face="#F7FAFF",     # более светлый синий фон графика
@@ -335,8 +335,8 @@ class DistributionApp:
             # Theme selection
             theme_frame = ttk.LabelFrame(self.right_frame, text="Визуальные темы", padding=5)
             theme_frame.pack(fill=tk.X, pady=5)
-            ttk.Radiobutton(theme_frame, text="Petrotrace", variable=self.theme_var,
-                            value="Petrotrace", command=self.apply_theme).pack(anchor=tk.W)
+            ttk.Radiobutton(theme_frame, text="PetroTrace", variable=self.theme_var,
+                            value="PetroTrace", command=self.apply_theme).pack(anchor=tk.W)
             ttk.Radiobutton(theme_frame, text="GPN", variable=self.theme_var,
                             value="GPN", command=self.apply_theme).pack(anchor=tk.W)
             ttk.Radiobutton(theme_frame, text="Пользовательская", variable=self.theme_var,
@@ -714,9 +714,10 @@ Ctrl+R - Очистить данные
                 rcParams['font.family'] = new_font
 
                 if self.fig and self.ax:
-                    self.ax.set_title(self.ax.get_title(), fontname=new_font)
-                    self.ax.set_xlabel(self.ax.get_xlabel(), fontname=new_font)
-                    self.ax.set_ylabel(self.ax.get_ylabel(), fontname=new_font)
+                    self.ax.set_title(self.ax.get_title(), fontname=new_font, fontsize=20)
+                    self.ax.set_xlabel(self.ax.get_xlabel(), fontname=new_font, fontsize=18)
+                    self.ax.set_ylabel(self.ax.get_ylabel(), fontname=new_font, fontsize=16)
+                    self.ax.tick_params(axis='both', labelsize=14)
                     self.canvas.draw()
 
                 messagebox.showinfo("Шрифт изменен", f"Шрифт изменен на {new_font}")
@@ -820,7 +821,7 @@ Ctrl+R - Очистить данные
                 logger.info(f"Output directory selected: {folder}")
         except Exception as e:
             logger.error(f"Failed to select directory: {e}")
-            messagebox.showerror("Ошибка", f"Не удалось выбрать папку: {e}")
+            messagebox.showerror("Ошибка", f"Не удалось выбрать директорию: {e}")
 
     def load_excel(self) -> None:
         #Loading reference lines
@@ -1022,10 +1023,11 @@ Ctrl+R - Очистить данные
                 # Set labels and title
                 xlabel = f"{param_name} ({unit})" if unit else param_name
                 self.ax.set_title(f"Гистограмма распределения параметра \"{param_name}\"",
-                                  fontname=self.current_font, fontsize=12)
-                self.ax.set_xlabel(xlabel, fontname=self.current_font, fontsize=10)
-                self.ax.set_ylabel("Частота", fontname=self.current_font, fontsize=10)
+                                  fontname=self.current_font, fontsize=20)
+                self.ax.set_xlabel(xlabel, fontname=self.current_font, fontsize=18)
+                self.ax.set_ylabel("Частота", fontname=self.current_font, fontsize=16)
 
+                self.ax.tick_params(axis='both', labelsize=14)
                 # Add grid for better readability
                 self.ax.grid(True, alpha=0.3)
 
@@ -1057,7 +1059,7 @@ Ctrl+R - Очистить данные
                     self.ax.axvline(x_val, color=color, linestyle='--',
                                     linewidth=3, alpha=0.8)
                     self.ax.text(x_val, ylim_top * 0.95, name, rotation=90,
-                                 verticalalignment='top', fontsize=14,
+                                 verticalalignment='top', fontsize=16,
                                  fontname=self.current_font, color=color)
                 except (ValueError, KeyError) as e:
                     logger.warning(f"Failed to add reference line: {e}")
@@ -1150,7 +1152,7 @@ Ctrl+R - Очистить данные
             analysis_window.geometry("800x600")
 
             # Create text widget
-            text_widget = tk.Text(analysis_window, wrap=tk.WORD, font=("Roboto", 10))
+            text_widget = tk.Text(analysis_window, wrap=tk.WORD, font=("Roboto", 12))
             text_widget.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
             # Add scrollbar
@@ -1272,16 +1274,16 @@ Ctrl+R - Очистить данные
                 return
 
             if not self.output_dir:
-                messagebox.showwarning("Внимание", "Сначала выберите папку для сохранения")
+                messagebox.showwarning("Внимание", "Сначала выберите директорию для сохранения")
                 return
 
             filename = filedialog.asksaveasfilename(
                 initialdir=self.output_dir,
-                defaultextension=".png",
+                defaultextension=".jpg",
                 filetypes=[
                     ("PNG Image", "*.png"),
                     ("JPEG Image", "*.jpg;*.jpeg"),
-                    ("PDF Document", "*.pdf")
+                    ("PDF", "*.pdf")
                 ],
                 title="Сохранить график как..."
             )
@@ -1304,7 +1306,7 @@ Ctrl+R - Очистить данные
                 return
 
             if not self.output_dir:
-                messagebox.showwarning("Внимание", "Сначала выберите папку для сохранения")
+                messagebox.showwarning("Внимание", "Сначала выберите директорию для сохранения")
                 return
 
             save_option = messagebox.askquestion(
